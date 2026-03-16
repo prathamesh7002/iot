@@ -5,34 +5,37 @@
 - Flask
 - Flask-Cors
 - python-dotenv
+- SQLite
 
-## Existing Files
+## Main Files
 
 - [backend/app.py](d:/project/chetan_iot/iot/backend/app.py)
 - [backend/app/__init__.py](d:/project/chetan_iot/iot/backend/app/__init__.py)
 - [backend/app/config.py](d:/project/chetan_iot/iot/backend/app/config.py)
-- [backend/app/extensions.py](d:/project/chetan_iot/iot/backend/app/extensions.py)
 - [backend/app/routes/health.py](d:/project/chetan_iot/iot/backend/app/routes/health.py)
+- [backend/app/routes/telemetry.py](d:/project/chetan_iot/iot/backend/app/routes/telemetry.py)
+- [backend/app/services/db.py](d:/project/chetan_iot/iot/backend/app/services/db.py)
+- [backend/app/services/telemetry_service.py](d:/project/chetan_iot/iot/backend/app/services/telemetry_service.py)
 
-## What Needs To Be Added Next
-
-### Routes
+## Implemented Routes
 
 - `GET /sensor`
+- `POST /api/v1/telemetry`
+- `GET /api/v1/health`
 - `GET /api/v1/telemetry/latest`
 - `GET /api/v1/telemetry/history`
 - `GET /api/v1/machine/status`
 - `GET /api/v1/alerts`
 
-### Services
+## Service Responsibilities
 
-Suggested service responsibilities:
 - parse device input
 - compute fault flags
 - determine machine status
-- store readings
+- store readings in SQLite
+- format alert responses
 
-### Suggested Fault Calculation
+## Fault Calculation
 
 ```python
 temperature_fault = temperature > 50
@@ -41,30 +44,30 @@ vibration_fault = vibration == 1
 machine_state = "fault" if any([temperature_fault, current_fault, vibration_fault]) else "normal"
 ```
 
-## Suggested Data Model
+## Stored Data Model
 
-For an initial version, each telemetry record can contain:
+Each telemetry record stores:
 
 - `temperature`
 - `current`
 - `vibration`
 - `status`
+- `temperature_fault`
+- `current_fault`
+- `vibration_fault`
 - `faults`
 - `created_at`
 
-## Storage Options
+## Storage
 
-### Phase 1
+SQLite is used for local persistence. The database file is created automatically at:
 
-Use in-memory storage or a simple JSON/file approach for rapid development.
+- `backend/app/data/iot.db`
 
-### Phase 2
+## Backend Startup Flow
 
-Move to SQLite or PostgreSQL if long-term history is needed.
-
-## Backend Priorities
-
-1. Add the device ingestion route
-2. Normalize data from query params
-3. Return latest telemetry to frontend
-4. Add history and alerts endpoints
+1. Load environment variables from `backend/.env`
+2. Initialize the SQLite database and telemetry table
+3. Register Flask routes and CORS
+4. Accept device/frontend telemetry and persist records
+5. Serve health, latest, history, status, and alerts endpoints

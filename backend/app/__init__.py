@@ -1,35 +1,15 @@
 from flask import Flask
 
 from .config import Config
-from .extensions import cors
-from .routes import api_bp
+from .routes import register_routes
+from .services.db import initialize_database
 
 
-def create_app(config_class=Config):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(Config)
 
-    register_extensions(app)
-    register_blueprints(app)
-
-    @app.get("/")
-    def home():
-        return {
-            "message": "Flask backend is running",
-            "service": "backend",
-            "version": "v1",
-        }
+    initialize_database(app.config["DATABASE_PATH"])
+    register_routes(app)
 
     return app
-
-
-def register_extensions(app):
-    cors.init_app(
-        app,
-        resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}},
-        supports_credentials=True,
-    )
-
-
-def register_blueprints(app):
-    app.register_blueprint(api_bp, url_prefix="/api/v1")

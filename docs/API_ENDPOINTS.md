@@ -115,8 +115,26 @@ Returns current summary state for the dashboard.
 
 Returns recent alerts or fault events for the dashboard.
 
+#### Suggested Response
+
+```json
+{
+  "items": [
+    {
+      "id": 12,
+      "severity": "high",
+      "message": "Fault detected: current",
+      "faults": ["current"],
+      "status": "fault",
+      "timestamp": "2026-03-16T12:00:00+00:00"
+    }
+  ],
+  "count": 1
+}
+```
+
 ## Notes
 
 - Keep `GET /sensor` for device compatibility.
 - Use `/api/v1/*` endpoints for frontend usage.
-- Later, `POST /api/v1/telemetry` can be added if the device firmware is updated.
+- `POST /api/v1/telemetry` is available for JSON-based clients.

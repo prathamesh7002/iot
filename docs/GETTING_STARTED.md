@@ -23,11 +23,17 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+copy .env.example .env
 python app.py
 ```
 
 Backend default URL:
 - `http://127.0.0.1:5000`
+
+SQLite database:
+- created automatically at `backend/app/data/iot.db`
+
+If `python -m venv .venv` looks stuck on Windows, wait for `ensurepip` to finish before interrupting it. If you stopped it midway, delete `backend/.venv` and run the command again.
 
 ## Frontend Setup
 
@@ -49,6 +55,7 @@ Use [backend/.env.example](d:/project/chetan_iot/iot/backend/.env.example) as th
 Important values:
 - `PORT=5000`
 - `FRONTEND_URL=http://localhost:5173`
+- `DATABASE_PATH=app/data/iot.db`
 
 ### Frontend
 

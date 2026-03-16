@@ -16,6 +16,7 @@ This project is an IoT monitoring system for a machine-health use case. It combi
 - Flask
 - Flask-Cors
 - python-dotenv
+- SQLite
 
 ### Frontend
 
@@ -50,10 +51,11 @@ iot/
 
 ### Backend
 
-The Flask backend will:
-- accept telemetry from the IoT device
-- compute machine state
-- provide APIs for the frontend
+The Flask backend:
+- accepts telemetry from the IoT device
+- computes machine state and fault flags
+- stores telemetry in SQLite
+- provides APIs for the frontend
 
 Start here:
 - [backend/app.py](d:/project/chetan_iot/iot/backend/app.py)
@@ -114,6 +116,6 @@ npm run dev
 - `GET /api/v1/machine/status`
 - `GET /api/v1/alerts`
 
-## Next Step
+## Current Status
 
-The documentation is now ready to guide implementation. The next build phase is to implement the telemetry ingestion endpoint and the dashboard UI against the documented API contract.
+The backend has been rebuilt from scratch around a simple Flask + SQLite architecture. The next frontend phase is to connect dashboard screens to the live telemetry, status, history, and alerts endpoints.
