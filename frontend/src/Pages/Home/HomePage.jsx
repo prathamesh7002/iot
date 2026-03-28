@@ -108,12 +108,13 @@ function HomePage() {
   const machineStatus = dashboard.status;
 
 
-  // Auto-reset modal dismissal if system is normal
+  // Calculate how long since the last data point arrived
+  const heartbeatStale = !latest || (new Date() - new Date(latest.timestamp)) > 20000;
+  
   // CRITICAL: Aggressive modal trigger logic
   const hasActiveThresholdBreach = (latest?.temperature > 60) || (latest?.current > 600) || (latest?.vibration === 1);
-  const showFullAlert = (machineStatus?.machine_state === "fault" || hasActiveThresholdBreach) && !modalDismissed;
+  const showFullAlert = (machineStatus?.machine_state === "fault" || hasActiveThresholdBreach) && !modalDismissed && !heartbeatStale;
   
-  // Calculate how long since the last data point arrived
   const secondsSinceUpdate = lastUpdated ? Math.floor((new Date() - lastUpdated) / 1000) : null;
   const isDataStale = secondsSinceUpdate !== null && secondsSinceUpdate > 10;
 
@@ -204,31 +205,31 @@ function HomePage() {
       <section className="mt-6 grid gap-6 lg:grid-cols-3">
         <SensorCard
           title="Temperature"
-          value={latest ? `${latest.temperature.toFixed(1)} °C` : "--"}
+          value={latest && !heartbeatStale ? `${latest.temperature.toFixed(1)} °C` : "--"}
           helper="Threshold: > 60 °C"
-          fault={latest?.temperature_fault}
+          fault={latest?.temperature_fault && !heartbeatStale}
           accent="from-cyan-500/20 to-cyan-100"
         />
         <SensorCard
           title="Current"
-          value={latest ? `${latest.current} mA` : "--"}
+          value={latest && !heartbeatStale ? `${latest.current} mA` : "--"}
           helper="Threshold: > 600 mA"
-          fault={latest?.current_fault}
+          fault={latest?.current_fault && !heartbeatStale}
           accent="from-amber-500/20 to-amber-100"
         />
         <SensorCard
           title="Vibration"
-          value={latest ? String(latest.vibration) : "--"}
+          value={latest && !heartbeatStale ? String(latest.vibration) : "--"}
           helper="Fault when value equals 1"
-          fault={latest?.vibration_fault}
+          fault={latest?.vibration_fault && !heartbeatStale}
           accent="from-rose-500/20 to-rose-100"
         />
         <div className="lg:col-span-3 mt-2 flex items-center justify-center gap-2">
-          <div className={`h-2 w-2 rounded-full ${isDataStale ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`}></div>
+          <div className={`h-2 w-2 rounded-full ${heartbeatStale ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`}></div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-            {lastUpdated 
-              ? `Last Hardware Heartbeat: ${secondsSinceUpdate}s ago` 
-              : "Waiting for first hardware connection..."}
+            {heartbeatStale 
+              ? "Hardware System OFFLINE (Waiting for data...)" 
+              : `Last Hardware Heartbeat: ${Math.floor((new Date() - new Date(latest.timestamp)) / 1000)}s ago`}
           </p>
         </div>
       </section>
