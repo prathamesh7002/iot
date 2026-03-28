@@ -160,7 +160,7 @@ function HistoryPage() {
               <div className="bg-[#1e293b] py-3 text-center">
                 <h3 className="text-lg font-bold text-white uppercase tracking-wide">Historical Graph Breakdown</h3>
               </div>
-              <div className="h-[400px] w-full p-4 pl-0">
+              <div className="h-[260px] sm:h-[400px] w-full p-4 pl-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                     <defs>
@@ -208,7 +208,7 @@ function HistoryPage() {
                 </span>
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] max-h-[500px] overflow-y-auto bg-white">
+              <div className="mt-6 overflow-x-auto rounded-[1.5rem] border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] max-h-[500px] overflow-y-auto bg-white">
                 <div className="sticky top-0 z-10 grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] bg-slate-800 text-white px-4 py-3 text-xs font-bold uppercase tracking-[0.25em] shadow-md">
                   <span>Time</span>
                   <span>Temp</span>
@@ -218,7 +218,7 @@ function HistoryPage() {
                 </div>
                 <div className="divide-y divide-slate-100 bg-white">
                   {historyData.map((item) => (
-                    <div key={item.id} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
+                      <div key={item.id} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
                       <span className="font-medium text-slate-900">{formatTimestamp(item.timestamp)}</span>
                       <span>{item.temperature.toFixed(1)} °C</span>
                       <span>{item.current} mA</span>

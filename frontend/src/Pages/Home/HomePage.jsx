@@ -202,7 +202,7 @@ function HomePage() {
         </div>
       )}
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-3">
+      <section className="mt-6 grid grid-cols-3 gap-4">
         <SensorCard
           title="Temperature"
           value={latest && !heartbeatStale ? `${latest.temperature.toFixed(1)} °C` : "--"}
@@ -301,7 +301,7 @@ function HomePage() {
           <div className="bg-[#2b6cb0] py-3 text-center">
             <h3 className="text-lg font-bold text-white uppercase tracking-wide">Live Data Graph</h3>
           </div>
-          <div className="h-[300px] w-full p-4 pl-0">
+          <div className="h-[240px] sm:h-[300px] w-full p-4 pl-0">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                 <defs>
@@ -361,7 +361,7 @@ function HomePage() {
             <span className="text-[10px] font-bold text-cyan-600 bg-cyan-50 px-2 py-1 rounded-md border border-cyan-100 uppercase tracking-widest">Fast Sync</span>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] bg-slate-50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 border-b border-slate-100">
               <span>Time</span>
               <span>Temp</span>
@@ -423,8 +423,8 @@ function HomePage() {
               </span>
             </div>
 
-            <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-slate-200">
-              <div className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] bg-slate-100 px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
+            <div className="mt-6 overflow-x-auto rounded-[1.5rem] border border-slate-200">
+              <div className="min-w-[600px] hidden sm:grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] bg-slate-100 px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
                 <span>Time</span>
                 <span>Temp</span>
                 <span>Current</span>
@@ -434,17 +434,36 @@ function HomePage() {
               <div className="divide-y divide-slate-100 bg-white">
                 {dashboard.history.length ? (
                   dashboard.history.slice(0, 20).map((item) => (
-                    <div
-                      key={item.id}
-                      className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] items-center px-4 py-3 text-sm text-slate-700"
-                    >
-                      <span>{formatTimestamp(item.timestamp)}</span>
-                      <span>{item.temperature.toFixed(1)} °C</span>
-                      <span>{item.current} mA</span>
-                      <span>{item.vibration}</span>
-                      <span>
-                        <StatusPill status={item.status} />
-                      </span>
+                    <div key={item.id}>
+                      <div className="hidden sm:grid min-w-[600px] grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr] items-center px-4 py-3 text-sm text-slate-700">
+                        <span>{formatTimestamp(item.timestamp)}</span>
+                        <span>{item.temperature.toFixed(1)} °C</span>
+                        <span>{item.current} mA</span>
+                        <span>{item.vibration}</span>
+                        <span>
+                          <StatusPill status={item.status} />
+                        </span>
+                      </div>
+                      <div className="block sm:hidden px-4 py-3 border-b border-slate-100 bg-white">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-bold text-slate-500 uppercase">{formatTimestamp(item.timestamp)}</span>
+                          <StatusPill status={item.status} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-4 text-sm text-slate-700">
+                          <div className="space-y-1">
+                            <div className="text-[10px] uppercase text-slate-400">Temp</div>
+                            <div>{item.temperature.toFixed(1)} °C</div>
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-[10px] uppercase text-slate-400">Current</div>
+                            <div>{item.current} mA</div>
+                          </div>
+                          <div className="space-y-1 col-span-2">
+                            <div className="text-[10px] uppercase text-slate-400">Vibration</div>
+                            <div>{item.vibration}</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -524,24 +543,15 @@ function HeroMetric({ label, value, detail, tone }) {
   );
 }
 
-function SensorCard({ title, value, helper, fault, accent }) {
+function SensorCard({ title, value, helper, fault }) {
   return (
-    <div
-      className={`panel-glow rounded-[2rem] border border-slate-200 bg-gradient-to-br ${accent} p-6`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Sensor
-          </p>
-          <h3 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
-            {title}
-          </h3>
-        </div>
-        <StatusPill status={fault ? "fault" : "normal"} />
+    <div className="rounded-xl border border-slate-300 bg-white p-5 shadow-sm text-center">
+      <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{title}</p>
+      <p className={`mt-4 text-5xl font-black ${fault ? 'text-rose-600' : 'text-sky-600'}`}>{value}</p>
+      <p className="mt-2 text-sm text-slate-500">{helper}</p>
+      <div className="mt-4 flex justify-center">
+        <StatusPill status={fault ? 'fault' : 'normal'} />
       </div>
-      <p className="mt-8 text-4xl font-black text-slate-950">{value}</p>
-      <p className="mt-3 text-sm text-slate-600">{helper}</p>
     </div>
   );
 }
@@ -563,14 +573,12 @@ function StatusFlag({ label, value }) {
 }
 
 function StatusPill({ status }) {
+  const isFault = status === "fault";
   return (
     <span
-      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] ${status === "fault"
-        ? "bg-rose-500 text-white"
-        : "bg-emerald-500 text-white"
-        }`}
+      className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${isFault ? "bg-rose-500 text-white" : "bg-emerald-500 text-white"}`}
     >
-      {status}
+      {isFault ? "FAULT" : "NORMAL"}
     </span>
   );
 }
