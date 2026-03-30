@@ -16,6 +16,7 @@ This project is an IoT monitoring system for a machine-health use case. It combi
 - Flask
 - Flask-Cors
 - python-dotenv
+- gunicorn
 - SQLite
 
 ### Frontend
@@ -94,6 +95,13 @@ pip install -r requirements.txt
 python app.py
 ```
 
+Render start command:
+- `gunicorn app:app`
+
+Render blueprint:
+- `render.yaml` provisions both the backend API and the frontend static site
+- backend data persists on a mounted disk at `/var/data/iot.db`
+
 ### Frontend
 
 ```bash
@@ -115,6 +123,21 @@ npm run dev
 - `GET /api/v1/telemetry/history`
 - `GET /api/v1/machine/status`
 - `GET /api/v1/alerts`
+
+## Render Deployment
+
+Deploy from the repo root with Render Blueprints:
+
+1. Connect the GitHub repository in Render
+2. Create services from `render.yaml`
+3. Let Render create both `iot-backend` and `iot-frontend`
+4. After deploy, open `/api/v1/health` on the backend to confirm the API is healthy
+
+Important deployment notes:
+- the backend service runs from `backend/`
+- the frontend static site runs from `frontend/`
+- SQLite is stored on the mounted Render disk, not inside the container filesystem
+- `CORS_ORIGINS` is set to `*` in `render.yaml` so the hosted frontend can reach the API without extra manual setup
 
 ## Current Status
 

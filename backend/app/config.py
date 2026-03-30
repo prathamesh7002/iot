@@ -15,3 +15,4 @@ class Config:
     DATABASE_PATH = str(BASE_DIR / os.getenv("DATABASE_PATH", "app/data/iot.db"))
     TEMP_FAULT_THRESHOLD = float(os.getenv("TEMP_FAULT_THRESHOLD", "60"))
     CURRENT_FAULT_THRESHOLD = int(os.getenv("CURRENT_FAULT_THRESHOLD", "600"))
+    CORS_ORIGINS = os.getenv("CORS_ORIGINS", "").strip()

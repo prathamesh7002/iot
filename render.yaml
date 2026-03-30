@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: iot-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.2
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: FRONTEND_URL
+        value: https://iot-liart-beta.vercel.app
+      - key: DATABASE_PATH
+        value: /var/data/iot.db
+      - key: CORS_ORIGINS
+        value: https://iot-liart-beta.vercel.app
+    disk:
+      name: iot-data
+      mountPath: /var/data
+      sizeGB: 1
+
+  - type: web
+    name: iot-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: iot-backend
+          property: url
