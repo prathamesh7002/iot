@@ -15,11 +15,11 @@ services:
       - key: FLASK_DEBUG
         value: "0"
       - key: FRONTEND_URL
-        value: https://iot-liart-beta.vercel.app
+        value: https://iot-beta-six.vercel.app
       - key: DATABASE_PATH
         value: /var/data/iot.db
       - key: CORS_ORIGINS
-        value: https://iot-liart-beta.vercel.app
+        value: https://iot-beta-six.vercel.app
     disk:
       name: iot-data
       mountPath: /var/data
