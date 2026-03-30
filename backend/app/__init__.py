@@ -13,3 +13,8 @@ def create_app():
     register_routes(app)
 
     return app
+
+
+# Export a module-level WSGI application so `gunicorn app:app` works even
+# when Python resolves `app` to this package instead of `backend/app.py`.
+app = create_app()
