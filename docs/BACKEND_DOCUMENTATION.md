@@ -39,7 +39,7 @@
 
 ```python
 temperature_fault = temperature > 50
-current_fault = current > 600
+current_fault = current > 550
 vibration_fault = vibration == 1
 machine_state = "fault" if any([temperature_fault, current_fault, vibration_fault]) else "normal"
 ```

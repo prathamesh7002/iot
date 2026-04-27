@@ -23,7 +23,7 @@ The Arduino code currently sends:
 
 The device logic marks a machine fault when:
 - `temperature > 50`
-- `currentValue > 600`
+- `currentValue > 550`
 - `vibration == HIGH`
 
 ## Platform Responsibilities

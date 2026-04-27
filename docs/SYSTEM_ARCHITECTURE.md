@@ -52,7 +52,7 @@ Sensors -> Arduino -> ESP8266 -> Flask Backend -> React Dashboard
 
 Based on the current Arduino sketch:
 - Temperature fault when `temp > 50`
-- Current fault when `current > 600`
+- Current fault when `current > 550`
 - Vibration fault when `vib == 1`
 
 Backend and frontend should use the same logic to keep the dashboard aligned with the device behavior.

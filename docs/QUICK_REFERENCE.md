@@ -9,7 +9,7 @@
 ## Fault Thresholds
 
 - temperature fault: `> 50`
-- current fault: `> 600`
+- current fault: `> 550`
 - vibration fault: `== 1`
 
 ## Important URLs

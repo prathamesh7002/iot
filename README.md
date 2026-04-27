@@ -36,7 +36,7 @@ Based on the Arduino sketch, the device sends:
 
 Current fault logic:
 - `temperature > 50`
-- `current > 600`
+- `current > 550`
 - `vibration == 1`
 
 ## Repository Structure

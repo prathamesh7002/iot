@@ -112,7 +112,7 @@ function HomePage() {
   const heartbeatStale = !latest || (new Date() - new Date(latest.timestamp)) > 20000;
   
   // CRITICAL: Aggressive modal trigger logic
-  const hasActiveThresholdBreach = (latest?.temperature > 60) || (latest?.current > 600) || (latest?.vibration === 1);
+  const hasActiveThresholdBreach = (latest?.temperature > 50) || (latest?.current > 550) || (latest?.vibration === 1);
   const showFullAlert = (machineStatus?.machine_state === "fault" || hasActiveThresholdBreach) && !modalDismissed && !heartbeatStale;
   
   const secondsSinceUpdate = lastUpdated ? Math.floor((new Date() - lastUpdated) / 1000) : null;
@@ -206,14 +206,14 @@ function HomePage() {
         <SensorCard
           title="Temperature"
           value={latest && !heartbeatStale ? `${latest.temperature.toFixed(1)} °C` : "--"}
-          helper="Threshold: > 60 °C"
+          helper="Threshold: > 50 °C"
           fault={latest?.temperature_fault && !heartbeatStale}
           accent="from-cyan-500/20 to-cyan-100"
         />
         <SensorCard
           title="Current"
           value={latest && !heartbeatStale ? `${latest.current} mA` : "--"}
-          helper="Threshold: > 600 mA"
+          helper="Threshold: > 550 mA"
           fault={latest?.current_fault && !heartbeatStale}
           accent="from-amber-500/20 to-amber-100"
         />
